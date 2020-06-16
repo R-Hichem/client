@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Container,
   Header,
@@ -10,12 +10,34 @@ import {
   List,
   ListItem,
   Button,
+  Spinner,
 } from 'native-base';
 import {Image, View} from 'react-native';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import {AuthContext} from './AuthProvider';
+import axios from 'axios';
+import {baseURL} from './baseURL';
+
+axios.defaults.baseURL = baseURL;
 
 const SingleCard = ({route, navigation}) => {
+  const {user} = useContext(AuthContext);
+  const [singleCard, setSingleCard] = useState(null);
+  const [loading, setLoading] = useState(true);
   const {card} = route.params;
+
+  useEffect(() => {
+    axios
+      .get('/api/cards/' + card.id)
+      .then(resposne => {
+        console.log(resposne.data.card);
+        setSingleCard(resposne.data.card);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.log('singleCardError', error);
+      });
+  }, []);
   return (
     <Container>
       <Header
@@ -80,7 +102,7 @@ const SingleCard = ({route, navigation}) => {
                 flexDirection: 'row',
                 justifyContent: 'center',
               }}>
-              <Text>Solde {card.sold} DZD</Text>
+              {loading ? <Spinner /> : <Text>Solde {singleCard.sold} DZD</Text>}
             </ListItem>
           </List>
 
