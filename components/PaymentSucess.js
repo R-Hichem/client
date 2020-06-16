@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Container,
   Header,
@@ -15,9 +15,15 @@ import {
 } from 'native-base';
 import {Image} from 'react-native';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import {AuthContext} from './AuthProvider';
+import axios from 'axios';
+import {baseURL} from './baseURL';
 
-const PaymentSucess = ({navigation}) => {
+axios.defaults.baseURL = baseURL;
+
+const PaymentSucess = ({route, navigation}) => {
   const [done, setDone] = useState(false);
+  const {data, card} = route.params;
   return (
     <Container>
       <Body>
@@ -53,7 +59,7 @@ const PaymentSucess = ({navigation}) => {
             </Button>
           </View>
         ) : (
-          <ChargementScreen setDone={setDone} />
+          <ChargementScreen setDone={setDone} data={data} card={card} />
         )}
       </Body>
     </Container>
@@ -62,11 +68,28 @@ const PaymentSucess = ({navigation}) => {
 
 export default PaymentSucess;
 
-const ChargementScreen = ({setDone}) => {
+const ChargementScreen = ({setDone, data, card}) => {
+  const {user} = useContext(AuthContext);
+  axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+  const dataObject = JSON.parse(data);
   useEffect(() => {
-    setTimeout(() => {
-      setDone(true);
-    }, 5000);
+    console.log(typeof dataObject);
+    console.log(dataObject.to);
+    axios
+      .post('/api/transaction', {
+        to: dataObject.to,
+        account_code: dataObject.account_code,
+        ammount: dataObject.ammount,
+        card_id: card.id,
+      })
+      .then(response => {
+        console.log('response', response.data);
+        setDone(true);
+      })
+      .catch(error => {
+        console.log('error', error.message);
+        setDone(true);
+      });
   }, []);
   return (
     <View
