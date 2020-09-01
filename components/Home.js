@@ -15,6 +15,7 @@ import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
 import {AuthContext} from './AuthProvider';
 import {baseURL} from './baseURL';
+import MyCardComponent from './MyCardComponent';
 
 axios.defaults.baseURL = baseURL;
 
@@ -76,6 +77,16 @@ const Home = ({navigation}) => {
       <Body>
         <ScrollView>
           {cards.map(card => {
+            return (
+              <TouchableOpacity>
+                <MyCardComponent
+                  name={card.name}
+                  number={card.card_number.match(/.{4}/g).join(' ')}
+                  expiry="04/2028"
+                  type="Master Card"
+                />
+              </TouchableOpacity>
+            );
             return <CreditCard navigation={navigation} card={card} />;
           })}
 

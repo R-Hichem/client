@@ -20,6 +20,7 @@ import {
   LiteCreditCardInput,
 } from 'react-native-credit-card-input';
 import MyCardComponent from './MyCardComponent';
+import LinearGradient from 'react-native-linear-gradient';
 
 axios.defaults.baseURL = baseURL;
 
@@ -41,6 +42,7 @@ const AddCard = ({navigation}) => {
         name="NEIL GAIMAN"
         number="5241 1734 7629 0435"
         expiry="04/2028"
+        type="Master Card"
       />
     </View>
   );
@@ -60,5 +62,19 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    margin: 10,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
   },
 });

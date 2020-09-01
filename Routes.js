@@ -54,15 +54,16 @@ const MainApp = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="AddCard"
-        component={AddCard}
+        name="Home"
+        component={Home}
         options={{
           header: () => null,
         }}
       />
+
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="AddCard"
+        component={AddCard}
         options={{
           header: () => null,
         }}

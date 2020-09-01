@@ -12,10 +12,18 @@ import {
 } from 'native-base';
 import {StyleSheet, Image, ImageBackground} from 'react-native';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
 
-const MyCardComponent = ({name, number, expiry}) => {
+const MyCardComponent = ({name, number, expiry, type}) => {
   return (
-    <View style={styles.credit_card}>
+    <LinearGradient
+      useAngle={true}
+      angle={25}
+      angleCenter={{x: 0.5, y: 0}}
+      colors={['#1399cd', '#0f509e']}
+      start={{x: 0.0, y: 0.25}}
+      end={{x: 0.5, y: 1.0}}
+      style={styles.credit_card}>
       <View
         style={{
           display: 'flex',
@@ -26,22 +34,27 @@ const MyCardComponent = ({name, number, expiry}) => {
           source={require('./images/visa_logo.png')}
           style={{width: 50, height: 50, backgroundColor: 'green'}}
         /> */}
-        <Text style={{...styles.credit_card__info_label, fontSize: 25}}>
-          Visa
+        <Text
+          style={{
+            ...styles.credit_card__info_label,
+            fontSize: 25,
+            fontWeight: 'bold',
+          }}>
+          {type}
         </Text>
       </View>
       <Text style={styles.credit_card__number}>{number}</Text>
       <View style={styles.credit_card__info}>
         <View style={styles.creditCardinfoName}>
           <Text style={styles.credit_card__info_label}>CARDHOLDER'S NAME</Text>
-          <Text style={{fontSize: 25}}>{name}</Text>
+          <Text style={{fontSize: 25, color: 'white'}}>{name}</Text>
         </View>
         <View style={styles.creditCardinfoExpirt}>
           <Text style={styles.credit_card__info_label}>Valid Up To</Text>
-          <Text style={{fontSize: 25}}>{expiry}</Text>
+          <Text style={{fontSize: 25, color: 'white'}}>{expiry}</Text>
         </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -53,7 +66,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     width: 350,
-    height: 250,
+    height: 230,
     padding: 25,
     borderRadius: 15,
     color: 'white',
@@ -74,6 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontFamily: "'Fjalla One', sans-serif",
     fontSize: 30,
+    color: 'white',
   },
   credit_card__info: {
     display: 'flex',
@@ -81,14 +95,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     fontFamily: "'Fjalla One', sans-serif",
     fontSize: 25,
+    color: 'white',
   },
   credit_card__info_label: {
     fontSize: 16,
+    color: 'white',
   },
   credit_card__info_expiry: {
     display: 'flex',
     flexDirection: 'row',
     flexDirection: 'column',
     alignItems: 'flex-end',
+    color: 'white',
   },
 });
