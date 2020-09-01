@@ -16,6 +16,7 @@ import axios from 'axios';
 import {AuthContext} from './AuthProvider';
 import {baseURL} from './baseURL';
 import MyCardComponent from './MyCardComponent';
+import LinearGradient from 'react-native-linear-gradient';
 
 axios.defaults.baseURL = baseURL;
 
@@ -53,37 +54,71 @@ const Home = ({navigation}) => {
     );
   }
   return (
-    <Container>
-      <Header
+    <Container style={{backgroundColor: '#E6E6E6'}}>
+      <LinearGradient
+        useAngle={true}
+        angle={180}
+        angleCenter={{x: 0.5, y: 0}}
+        colors={['#1399cd', '#0f509e']}
+        start={{x: 0.0, y: 0.25}}
+        end={{x: 0.5, y: 1.0}}
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          backgroundColor: '#5DA271',
+          padding: 10,
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
         }}>
+        <Icon
+          type="FontAwesome"
+          name="user"
+          style={{margin: 10, color: 'white', fontSize: 20}}
+        />
         <Text
           style={{
-            fontSize: 30,
-            color: 'white',
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
           }}>
-          e wallet
+          Mes cartes
         </Text>
-        <Icon
-          type="Feather"
-          name="credit-card"
-          style={{marginLeft: 10, color: 'white', fontSize: 28}}
-        />
-      </Header>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
+            textAlign: 'right',
+            justifyContent: 'flex-end',
+            flexGrow: 1,
+          }}>
+          <Icon
+            type="FontAwesome"
+            name="bell"
+            style={{margin: 10, color: 'white', fontSize: 20}}
+          />
+        </Text>
+      </LinearGradient>
       <Body>
         <ScrollView>
           {cards.map(card => {
             return (
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('SingleCard', {
+                    card,
+                  })
+                }
+                style={{
+                  marginVertical: 15,
+                }}>
                 <MyCardComponent
                   name={card.name}
                   number={card.card_number.match(/.{4}/g).join(' ')}
-                  expiry="04/2028"
-                  type="Master Card"
+                  expiry={card.exp}
+                  type={card.type}
                 />
               </TouchableOpacity>
             );

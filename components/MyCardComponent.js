@@ -37,7 +37,7 @@ const MyCardComponent = ({name, number, expiry, type}) => {
         <Text
           style={{
             ...styles.credit_card__info_label,
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: 'bold',
           }}>
           {type}
@@ -47,11 +47,11 @@ const MyCardComponent = ({name, number, expiry, type}) => {
       <View style={styles.credit_card__info}>
         <View style={styles.creditCardinfoName}>
           <Text style={styles.credit_card__info_label}>CARDHOLDER'S NAME</Text>
-          <Text style={{fontSize: 25, color: 'white'}}>{name}</Text>
+          <Text style={{fontSize: 20, color: 'white'}}>{name}</Text>
         </View>
         <View style={styles.creditCardinfoExpirt}>
           <Text style={styles.credit_card__info_label}>Valid Up To</Text>
-          <Text style={{fontSize: 25, color: 'white'}}>{expiry}</Text>
+          <Text style={{fontSize: 20, color: 'white'}}>{expiry}</Text>
         </View>
       </View>
     </LinearGradient>
@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    width: 350,
-    height: 230,
+    width: 300,
+    height: 190,
     padding: 25,
     borderRadius: 15,
     color: 'white',
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     fontFamily: "'Fjalla One', sans-serif",
-    fontSize: 30,
+    fontSize: 25,
     color: 'white',
   },
   credit_card__info: {
@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     fontFamily: "'Fjalla One', sans-serif",
-    fontSize: 25,
+    fontSize: 20,
     color: 'white',
   },
   credit_card__info_label: {
-    fontSize: 16,
+    fontSize: 12,
     color: 'white',
   },
   credit_card__info_expiry: {
