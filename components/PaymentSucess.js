@@ -81,6 +81,8 @@ const ChargementScreen = ({setDone, data, card}) => {
         account_code: dataObject.account_code,
         ammount: dataObject.ammount,
         card_id: card.id,
+        vendeur_id: dataObject.vendeur_id,
+        order_id: dataObject.order_id,
       })
       .then(response => {
         console.log('response', response.data);

@@ -10,6 +10,7 @@ import {AuthContext} from './components/AuthProvider';
 import {View, Spinner} from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import LoginScreen from './components/LoginScreen';
+import AddCard from './components/AddCard';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -47,12 +48,18 @@ const Routes = () => {
     </NavigationContainer>
   );
 };
-
 export default Routes;
 
 const MainApp = () => {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="AddCard"
+        component={AddCard}
+        options={{
+          header: () => null,
+        }}
+      />
       <Stack.Screen
         name="Home"
         component={Home}
@@ -60,6 +67,7 @@ const MainApp = () => {
           header: () => null,
         }}
       />
+
       <Stack.Screen
         name="SingleCard"
         component={SingleCard}
