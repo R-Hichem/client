@@ -25,26 +25,113 @@ import LinearGradient from 'react-native-linear-gradient';
 axios.defaults.baseURL = baseURL;
 
 const AddCard = ({navigation}) => {
+  const [newCardObject, setNewCardObject] = useState(null);
+  const __onChange = form => {
+    console.log(form.status);
+    setNewCardObject(form);
+  };
   const cardInfo = {
     type: 'visa',
   };
-  const _onChange = form => console.log(form);
 
   return (
-    <View
-      style={{
-        display: 'flex',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <MyCardComponent
-        name="NEIL GAIMAN"
-        number="5241 1734 7629 0435"
-        expiry="04/2028"
-        type="Master Card"
+    <Container style={{backgroundColor: '#E6E6E6'}}>
+      <LinearGradient
+        useAngle={true}
+        angle={180}
+        angleCenter={{x: 0.5, y: 0}}
+        colors={['#1399cd', '#0f509e']}
+        start={{x: 0.0, y: 0.25}}
+        end={{x: 0.5, y: 1.0}}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          backgroundColor: '#5DA271',
+          padding: 10,
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
+        }}>
+        <Icon
+          type="FontAwesome"
+          name="user"
+          style={{margin: 10, color: 'white', fontSize: 20}}
+        />
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
+          }}>
+          Mes cartes
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
+            textAlign: 'right',
+            justifyContent: 'flex-end',
+            flexGrow: 1,
+          }}>
+          <Icon
+            type="FontAwesome"
+            name="bell"
+            style={{margin: 10, color: 'white', fontSize: 20}}
+          />
+        </Text>
+      </LinearGradient>
+      <CreditCardInput
+        onChange={__onChange}
+        addtionalInputsProps={{
+          name: {
+            defaultValue: 'my name',
+            maxLength: 40,
+          },
+          postalCode: {
+            returnKeyType: 'go',
+          },
+        }}
       />
-    </View>
+      {newCardObject ? (
+        newCardObject.status.number === 'valid' &&
+        newCardObject.status.expiry === 'valid' &&
+        newCardObject.status.cvc === 'valid' ? (
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 25,
+              fontWeight: 'bold',
+              padding: 15,
+              color: 'green',
+            }}>
+            valid
+          </Text>
+        ) : (
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 25,
+              fontWeight: 'bold',
+              padding: 15,
+              color: 'red',
+            }}>
+            not valid yet
+          </Text>
+        )
+      ) : (
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 25,
+            fontWeight: 'bold',
+            padding: 15,
+          }}>
+          hello not def ?
+        </Text>
+      )}
+    </Container>
   );
 };
 

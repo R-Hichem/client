@@ -17,6 +17,8 @@ import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import {AuthContext} from './AuthProvider';
 import axios from 'axios';
 import {baseURL} from './baseURL';
+import LinearGradient from 'react-native-linear-gradient';
+import MyCardComponent from './MyCardComponent';
 
 axios.defaults.baseURL = baseURL;
 
@@ -40,85 +42,92 @@ const SingleCard = ({route, navigation}) => {
   }, []);
   return (
     <Container>
-      <Header
+      <LinearGradient
+        useAngle={true}
+        angle={180}
+        angleCenter={{x: 0.5, y: 0}}
+        colors={['#1399cd', '#0f509e']}
+        start={{x: 0.0, y: 0.25}}
+        end={{x: 0.5, y: 1.0}}
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          backgroundColor: '#5DA271',
+          padding: 10,
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
         }}>
+        <Icon
+          type="FontAwesome"
+          name={
+            card.type == 'Visa Card'
+              ? 'cc-visa'
+              : card.type == 'MasterCard'
+              ? 'cc-mastercard'
+              : 'credit-card'
+          }
+          style={{margin: 10, color: 'white', fontSize: 20}}
+        />
         <Text
           style={{
-            fontSize: 30,
-            color: 'white',
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
           }}>
           {card.type}
         </Text>
-        <Icon
-          type="Feather"
-          name="credit-card"
-          style={{marginLeft: 10, color: 'white', fontSize: 28}}
-        />
-      </Header>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
+            textAlign: 'right',
+            justifyContent: 'flex-end',
+            flexGrow: 1,
+          }}>
+          <Icon
+            type="FontAwesome"
+            name="bell"
+            style={{margin: 10, color: 'white', fontSize: 20}}
+          />
+        </Text>
+      </LinearGradient>
       <Body>
         <ScrollView style={{padding: 10}}>
-          <CreditCard navigation={navigation} />
-          <List>
-            <ListItem
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
-              <Text>{card.type}</Text>
-            </ListItem>
-            <ListItem
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
-              <Text>**** **** **** {card.card_number.slice(-4)} </Text>
-            </ListItem>
-            <ListItem
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
-              <Text>{card.name}</Text>
-            </ListItem>
-            <ListItem
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
-              <Text>date d'xpiration {card.exp}</Text>
-            </ListItem>
-            <ListItem
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
-              {loading ? <Spinner /> : <Text>Solde {singleCard.sold} DZD</Text>}
-            </ListItem>
-          </List>
+          {/* <CreditCard navigation={navigation} /> */}
+          <MyCardComponent
+            name={card.name}
+            number={card.card_number.match(/.{4}/g).join(' ')}
+            expiry={card.exp}
+            type={card.type}
+          />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              padding: 50,
+            }}>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Text style={{fontSize: 20}}>Solde {singleCard.sold} DZD</Text>
+            )}
+          </View>
 
-          <Button
-            block
-            style={{marginBottom: 15}}
+          <TouchableOpacity
             onPress={() =>
               navigation.navigate('CameraModule', {
                 card,
               })
             }>
-            <Text>Payer</Text>
-          </Button>
-          <Button block>
-            <Text>Modifier</Text>
-          </Button>
+            <MyButton text="payer" iconName="credit-card" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <MyButton text="Modifier" iconName="credit-card" />
+          </TouchableOpacity>
         </ScrollView>
       </Body>
     </Container>
@@ -135,5 +144,45 @@ const CreditCard = () => {
         style={{height: 150, width: 250, marginVertical: 15}}
       />
     </View>
+  );
+};
+
+const MyButton = ({text, iconName, iconFamily}) => {
+  return (
+    <LinearGradient
+      useAngle={true}
+      angle={180}
+      angleCenter={{x: 0.5, y: 0}}
+      colors={['#1399cd', '#0f509e']}
+      start={{x: 0.0, y: 0.25}}
+      end={{x: 0.5, y: 1.0}}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#5DA271',
+        padding: 10,
+        borderRadius: 15,
+        marginVertical: 8,
+      }}>
+      <Text
+        style={{
+          fontSize: 20,
+          color: '#F5F1ED',
+          flexDirection: 'row',
+          fontWeight: 'bold',
+          justifyContent: 'center',
+          flexGrow: 1,
+          textAlign: 'center',
+        }}>
+        {text}
+      </Text>
+      {/* <Icon
+          type={iconFamily ? iconFamily : 'FontAwesome'}
+          name={iconName}
+          style={{margin: 10, color: 'white', fontSize: 20}}
+        /> */}
+    </LinearGradient>
   );
 };

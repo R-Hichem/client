@@ -28,20 +28,23 @@ const MyCardComponent = ({name, number, expiry, type}) => {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
         }}>
         {/* <ImageBackground
           source={require('./images/visa_logo.png')}
           style={{width: 50, height: 50, backgroundColor: 'green'}}
         /> */}
-        <Text
-          style={{
-            ...styles.credit_card__info_label,
-            fontSize: 20,
-            fontWeight: 'bold',
-          }}>
-          {type}
-        </Text>
+        <Icon
+          type="FontAwesome"
+          name={
+            type == 'Visa Card'
+              ? 'cc-visa'
+              : type == 'MasterCard'
+              ? 'cc-mastercard'
+              : 'credit-card'
+          }
+          style={{margin: 10, color: 'white', fontSize: 30}}
+        />
       </View>
       <Text style={styles.credit_card__number}>{number}</Text>
       <View style={styles.credit_card__info}>
