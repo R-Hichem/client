@@ -13,51 +13,61 @@ import {
 import {StyleSheet, Image, ImageBackground} from 'react-native';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
+import {cardGradientArray} from './cardGradientArray';
 
 const MyCardComponent = ({name, number, expiry, type}) => {
   return (
-    <LinearGradient
-      useAngle={true}
-      angle={25}
-      angleCenter={{x: 0.5, y: 0}}
-      colors={['#1399cd', '#0f509e']}
-      start={{x: 0.0, y: 0.25}}
-      end={{x: 0.5, y: 1.0}}
-      style={styles.credit_card}>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-        }}>
-        {/* <ImageBackground
+    <View>
+      <LinearGradient
+        useAngle={false}
+        angle={25}
+        angleCenter={{x: 0.5, y: 0}}
+        //colors={['#1399cd', '#0f509e']}
+        colors={
+          cardGradientArray[type]
+            ? cardGradientArray[type]
+            : cardGradientArray.fallback
+        }
+        start={{x: 0.0, y: 0.25}}
+        end={{x: 0.5, y: 1.0}}
+        style={styles.credit_card}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+          }}>
+          {/* <ImageBackground
           source={require('./images/visa_logo.png')}
           style={{width: 50, height: 50, backgroundColor: 'green'}}
         /> */}
-        <Icon
-          type="FontAwesome"
-          name={
-            type == 'visa'
-              ? 'cc-visa'
-              : type == 'master-card'
-              ? 'cc-mastercard'
-              : 'credit-card'
-          }
-          style={{margin: 10, color: 'white', fontSize: 30}}
-        />
-      </View>
-      <Text style={styles.credit_card__number}>{number}</Text>
-      <View style={styles.credit_card__info}>
-        <View style={styles.creditCardinfoName}>
-          <Text style={styles.credit_card__info_label}>CARDHOLDER'S NAME</Text>
-          <Text style={{fontSize: 20, color: 'white'}}>{name}</Text>
+          <Icon
+            type="FontAwesome"
+            name={
+              type == 'visa'
+                ? 'cc-visa'
+                : type == 'master-card'
+                ? 'cc-mastercard'
+                : 'credit-card'
+            }
+            style={{margin: 10, color: 'white', fontSize: 30}}
+          />
         </View>
-        <View style={styles.creditCardinfoExpirt}>
-          <Text style={styles.credit_card__info_label}>Valid Up To</Text>
-          <Text style={{fontSize: 20, color: 'white'}}>{expiry}</Text>
+        <Text style={styles.credit_card__number}>{number}</Text>
+        <View style={styles.credit_card__info}>
+          <View style={styles.creditCardinfoName}>
+            <Text style={styles.credit_card__info_label}>
+              CARDHOLDER'S NAME
+            </Text>
+            <Text style={{fontSize: 20, color: 'white'}}>{name}</Text>
+          </View>
+          <View style={styles.creditCardinfoExpirt}>
+            <Text style={styles.credit_card__info_label}>Valid Up To</Text>
+            <Text style={{fontSize: 20, color: 'white'}}>{expiry}</Text>
+          </View>
         </View>
-      </View>
-    </LinearGradient>
+      </LinearGradient>
+    </View>
   );
 };
 

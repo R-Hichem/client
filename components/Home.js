@@ -123,9 +123,10 @@ const Home = ({navigation}) => {
       </LinearGradient>
       <Body>
         <ScrollView>
-          {cards.map(card => {
+          {cards.reverse().map(card => {
             return (
               <TouchableOpacity
+                key={card.id}
                 onLongPress={() => alert('TODO: modifier ? supprimer ?')}
                 onPress={() =>
                   navigation.navigate('SingleCard', {
