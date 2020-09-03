@@ -11,6 +11,8 @@ import {View, Spinner} from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import LoginScreen from './components/LoginScreen';
 import AddCard from './components/AddCard';
+import UniqueCardSettings from './components/UniqueCardSettings';
+import SingleCardEdit from './components/SingleCardEdit';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -64,6 +66,22 @@ const MainApp = () => {
       <Stack.Screen
         name="AddCard"
         component={AddCard}
+        options={{
+          header: () => null,
+        }}
+      />
+
+      <Stack.Screen
+        name="UniqueCardSettings"
+        component={UniqueCardSettings}
+        options={{
+          header: () => null,
+        }}
+      />
+
+      <Stack.Screen
+        name="SingleCardEdit"
+        component={SingleCardEdit}
         options={{
           header: () => null,
         }}

@@ -12,7 +12,7 @@ import {
   Button,
   Spinner,
 } from 'native-base';
-import {Image, View} from 'react-native';
+import {Image, View, ActivityIndicator, Alert} from 'react-native';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import {AuthContext} from './AuthProvider';
 import axios from 'axios';
@@ -22,10 +22,11 @@ import MyCardComponent from './MyCardComponent';
 
 axios.defaults.baseURL = baseURL;
 
-const SingleCard = ({route, navigation}) => {
+const UniqueCardSettings = ({route, navigation}) => {
   const {user} = useContext(AuthContext);
   const [singleCard, setSingleCard] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const {card} = route.params;
 
   useEffect(() => {
@@ -40,6 +41,20 @@ const SingleCard = ({route, navigation}) => {
         console.log('singleCardError', error);
       });
   }, []);
+  if (deleteLoading) {
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center',
+        }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
   return (
     <Container>
       <LinearGradient
@@ -62,9 +77,9 @@ const SingleCard = ({route, navigation}) => {
         <Icon
           type="FontAwesome"
           name={
-            card.type == 'Visa Card'
+            card.type == 'visa'
               ? 'cc-visa'
-              : card.type == 'MasterCard'
+              : card.type == 'master-card'
               ? 'cc-mastercard'
               : 'credit-card'
           }
@@ -118,20 +133,47 @@ const SingleCard = ({route, navigation}) => {
           </View>
 
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('CameraModule', {
-                card,
-              })
-            }>
-            <MyButton text="payer" iconName="credit-card" />
+            onPress={() => {
+              Alert.alert(
+                'Attention',
+                'Etes vous sure de vouloir supprimer votre carte ?',
+                [
+                  {
+                    text: 'Non',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Oui',
+                    onPress: () => {
+                      setDeleteLoading(true);
+                      axios
+                        .post('/api/removeCard/' + card.id)
+                        .then(resposne => {
+                          console.log(resposne.data);
+                          setDeleteLoading(false);
+                          alert('card removed');
+                          navigation.navigate('Home');
+                        })
+                        .catch(error => {
+                          console.log(error);
+                          setDeleteLoading(false);
+                          alert("une erreur c'est produite");
+                        });
+                    },
+                  },
+                ],
+                {cancelable: true},
+              );
+            }}>
+            <MyButton text="Supprimer" iconName="credit-card" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('UniqueCardSettings', {
+              navigation.navigate('SingleCardEdit', {
                 card,
               })
             }>
-            <MyButton text="Paramètres" iconName="credit-card" />
+            <MyButton text="Modifier les informations" iconName="credit-card" />
           </TouchableOpacity>
         </ScrollView>
       </Body>
@@ -139,7 +181,7 @@ const SingleCard = ({route, navigation}) => {
   );
 };
 
-export default SingleCard;
+export default UniqueCardSettings;
 
 const CreditCard = () => {
   return (

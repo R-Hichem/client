@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import {
   Container,
   Header,
@@ -28,22 +28,25 @@ import MyButton from './MyButton';
 
 axios.defaults.baseURL = baseURL;
 
-const AddCard = ({navigation}) => {
+const SingleCardEdit = ({route, navigation}) => {
   const [newCardObject, setNewCardObject] = useState(null);
-  const [cardHolderName, setCardHolderName] = useState('');
   const [loading, setLoading] = useState(false);
   const {addCard, user} = useContext(AuthContext);
+  const {card} = route.params;
+  const [cardHolderName, setCardHolderName] = useState(card.name);
   const __onChange = form => {
-    console.log(form.status);
+    console.log(form);
     setNewCardObject(form);
+    setCardHolderName(form.values.name);
   };
   const cardInfo = {
     type: 'visa',
   };
-  const addCardInfo = (cardName, cardDetails, user, setLoading) => {
+  const editCardinfo = (cardName, cardDetails, user, setLoading) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
     axios
-      .post('/api/addCard', {
+      .post('/api/editcard/' + card.id, {
+        id: card.id,
         name: cardName,
         card_number: cardDetails.number,
         type: cardDetails.type ? cardDetails.type : 'other',
@@ -52,7 +55,7 @@ const AddCard = ({navigation}) => {
       })
       .then(response => {
         setLoading(false);
-        alert('carte ajouté');
+        alert('carte modifié !');
         navigation.navigate('Home');
       })
       .catch(error => {
@@ -127,7 +130,7 @@ const AddCard = ({navigation}) => {
         style={{
           padding: 10,
         }}>
-        <Form style={{paddingHorizontal: 25}}>
+        {/* <Form style={{paddingHorizontal: 25}}>
           <Item
             style={{
               borderBottomWidth: 2,
@@ -142,22 +145,23 @@ const AddCard = ({navigation}) => {
               value={cardHolderName}
             />
           </Item>
-        </Form>
+        </Form> */}
         <CreditCardInput
+          allowScroll
+          requiresName
           cardScale={0.9}
           onChange={__onChange}
           labels={{
             number: 'Numero de la carte',
-            expiry: "Date d'expiration",
+            expiry: 'exp',
+            cvc: 'cvc',
+            name: 'Nom Sur La Carte',
           }}
-          addtionalInputsProps={{
-            name: {
-              defaultValue: 'my name',
-              maxLength: 40,
-            },
-            postalCode: {
-              returnKeyType: 'go',
-            },
+          placeholders={{
+            number: card.card_number,
+            expiry: card.exp,
+            cvc: card.ccv,
+            name: card.name,
           }}
         />
 
@@ -169,7 +173,7 @@ const AddCard = ({navigation}) => {
               <TouchableOpacity
                 onPress={() => {
                   setLoading(true);
-                  addCardInfo(
+                  editCardinfo(
                     cardHolderName,
                     newCardObject.values,
                     user,
@@ -210,7 +214,7 @@ const AddCard = ({navigation}) => {
   );
 };
 
-export default AddCard;
+export default SingleCardEdit;
 
 const styles = StyleSheet.create({
   addCard: {

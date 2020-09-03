@@ -10,8 +10,12 @@ import {
   Spinner,
   View,
 } from 'native-base';
-import {StyleSheet, Image} from 'react-native';
-import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import {StyleSheet, Image, Modal, Alert} from 'react-native';
+import {
+  TouchableOpacity,
+  ScrollView,
+  TouchableHighlight,
+} from 'react-native-gesture-handler';
 import axios from 'axios';
 import {AuthContext} from './AuthProvider';
 import {baseURL} from './baseURL';
@@ -24,6 +28,7 @@ const Home = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
   useEffect(() => {
     axios
@@ -127,7 +132,26 @@ const Home = ({navigation}) => {
             return (
               <TouchableOpacity
                 key={card.id}
-                onLongPress={() => alert('TODO: modifier ? supprimer ?')}
+                onLongPress={() => {
+                  navigation.navigate('UniqueCardSettings', {
+                    card,
+                  });
+                  /*
+                  alert('TODO: modifier ? supprimer ?');
+                  axios
+                    .post('/api/removeCard/' + card.id)
+                    .then(resposne => {
+                      console.log(resposne.data);
+                      setLoading(false);
+                      alert('card removed');
+                      navigation.navigate('Home');
+                    })
+                    .catch(error => {
+                      console.log(error);
+                      setLoading(false);
+                      alert("une erreur c'est produite");
+                    });*/
+                }}
                 onPress={() =>
                   navigation.navigate('SingleCard', {
                     card,
@@ -137,7 +161,7 @@ const Home = ({navigation}) => {
                   marginVertical: 15,
                 }}>
                 <MyCardComponent
-                  name={card.name}
+                  name={card.name.toUpperCase()}
                   number={card.card_number}
                   expiry={card.exp}
                   type={card.type}
@@ -148,6 +172,28 @@ const Home = ({navigation}) => {
           })}
 
           <AddCreditCard navigation={navigation} />
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Hello World!</Text>
+
+                <TouchableHighlight
+                  style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <Text style={styles.textStyle}>Hide Modal</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </Body>
     </Container>
@@ -197,5 +243,41 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
