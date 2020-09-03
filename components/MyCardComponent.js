@@ -37,9 +37,9 @@ const MyCardComponent = ({name, number, expiry, type}) => {
         <Icon
           type="FontAwesome"
           name={
-            type == 'Visa Card'
+            type == 'visa'
               ? 'cc-visa'
-              : type == 'MasterCard'
+              : type == 'master-card'
               ? 'cc-mastercard'
               : 'credit-card'
           }

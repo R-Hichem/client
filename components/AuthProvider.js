@@ -66,6 +66,27 @@ export const AuthProvider = ({children}) => {
               setLoading(false);
             });
         },
+        // addCard: (cardName, cardDetails) => {
+        //   axios.defaults.headers.common['Authorization'] = `Bearer ${
+        //     user.token
+        //   }`;
+        //   axios
+        //     .post('/api/addCard', {
+        //       name: cardName,
+        //       card_number: cardDetails.number,
+        //       type: cardDetails.type,
+        //       ccv: cardDetails.cvc,
+        //       exp: cardDetails.expiry,
+        //     })
+        //     .then(response => {
+        //       setUser(null);
+        //       setLoading(false);
+        //     })
+        //     .catch(error => {
+        //       console.log(error.response);
+        //       setLoading(false);
+        //     });
+        // },
         loading,
         setLoading,
       }}>

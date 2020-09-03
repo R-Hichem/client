@@ -39,6 +39,26 @@ const Home = ({navigation}) => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      axios
+        .post('/api/cards')
+        .then(resposne => {
+          console.log(resposne.data);
+
+          setCards(resposne.data);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.log(error);
+          setLoading(false);
+        });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   if (loading) {
     return (
       <View
@@ -106,6 +126,7 @@ const Home = ({navigation}) => {
           {cards.map(card => {
             return (
               <TouchableOpacity
+                onLongPress={() => alert('TODO: modifier ? supprimer ?')}
                 onPress={() =>
                   navigation.navigate('SingleCard', {
                     card,
@@ -116,7 +137,7 @@ const Home = ({navigation}) => {
                 }}>
                 <MyCardComponent
                   name={card.name}
-                  number={card.card_number.match(/.{4}/g).join(' ')}
+                  number={card.card_number}
                   expiry={card.exp}
                   type={card.type}
                 />
