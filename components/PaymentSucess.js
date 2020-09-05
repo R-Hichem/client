@@ -23,11 +23,12 @@ axios.defaults.baseURL = baseURL;
 
 const PaymentSucess = ({route, navigation}) => {
   const [done, setDone] = useState(false);
+  const [error, setError] = useState(false);
   const {data, card} = route.params;
   return (
     <Container>
       <Body>
-        {done ? (
+        {done && !error ? (
           <View
             style={{
               display: 'flex',
@@ -47,7 +48,7 @@ const PaymentSucess = ({route, navigation}) => {
               }}>
               <Text>OK</Text>
             </Button>
-            <Button
+            {/* <Button
               block
               onPress={() => {
                 navigation.goBack();
@@ -56,10 +57,48 @@ const PaymentSucess = ({route, navigation}) => {
                 marginTop: 30,
               }}>
               <Text>Faire un autre payement</Text>
+            </Button> */}
+          </View>
+        ) : done && error ? (
+          <View
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}>
+            <Text style={{fontWeight: 'bold', color: 'red'}}>
+              Transaction Refusé !
+            </Text>
+            <Button
+              block
+              danger
+              onPress={() => {
+                navigation.navigate('Home');
+              }}
+              style={{
+                marginTop: 30,
+              }}>
+              <Text>OK</Text>
             </Button>
+            {/* <Button
+              block
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={{
+                marginTop: 30,
+              }}>
+              <Text>Faire un autre payement</Text>
+            </Button> */}
           </View>
         ) : (
-          <ChargementScreen setDone={setDone} data={data} card={card} />
+          <ChargementScreen
+            setDone={setDone}
+            data={data}
+            card={card}
+            setError={setError}
+          />
         )}
       </Body>
     </Container>
@@ -68,7 +107,7 @@ const PaymentSucess = ({route, navigation}) => {
 
 export default PaymentSucess;
 
-const ChargementScreen = ({setDone, data, card}) => {
+const ChargementScreen = ({setDone, data, card, setError}) => {
   const {user} = useContext(AuthContext);
   axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
   const dataObject = JSON.parse(data);
@@ -90,6 +129,7 @@ const ChargementScreen = ({setDone, data, card}) => {
       })
       .catch(error => {
         console.log('error', error.message);
+        setError(true);
         setDone(true);
       });
   }, []);
