@@ -19,6 +19,7 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-camera": "^3.28.0",
+    "react-native-credit-card": "^0.1.9",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-linear-gradient": "^2.5.6",

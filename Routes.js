@@ -13,6 +13,7 @@ import LoginScreen from './components/LoginScreen';
 import AddCard from './components/AddCard';
 import UniqueCardSettings from './components/UniqueCardSettings';
 import SingleCardEdit from './components/SingleCardEdit';
+import TestComponent from './components/TestComponent';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -57,7 +58,7 @@ const MainApp = () => {
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
-        component={Home}
+        component={TestComponent}
         options={{
           header: () => null,
         }}
