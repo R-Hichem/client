@@ -22,7 +22,7 @@ import {baseURL} from './baseURL';
 import MyCardComponent from './MyCardComponent';
 import LinearGradient from 'react-native-linear-gradient';
 import CreditCard from 'react-native-credit-card';
-
+import MyCustomCardThatDoesNotFlip from './MyCustomCardThatDoesNotFlip';
 axios.defaults.baseURL = baseURL;
 
 const TestComponent = ({navigation}) => {
@@ -108,6 +108,7 @@ const TestComponent = ({navigation}) => {
             fontSize: 20,
             color: '#F5F1ED',
             fontWeight: 'bold',
+            fontFamily: 'Kredit',
           }}>
           Mes cartes
         </Text>
@@ -136,7 +137,7 @@ const TestComponent = ({navigation}) => {
                 imagedata = require('./images/background.png');
                 break;
               case 'master-card':
-                imagedata = require('./images/vector.png');
+                imagedata = require('./images/card-front.png');
                 break;
               default:
                 break;
@@ -178,7 +179,7 @@ const TestComponent = ({navigation}) => {
                   expiry={card.exp}
                   type={card.type}
                 /> */}
-                <CreditCard
+                <MyCustomCardThatDoesNotFlip
                   imageFront={imagedata}
                   imageBack={imagedata}
                   shiny={true}
@@ -247,7 +248,7 @@ const AddCreditCard = ({navigation}) => {
       onPress={() => navigation.navigate('AddCard')}>
       <Icon type="Feather" name="plus" style={{color: 'black', fontSize: 50}} />
       <Text style={{color: 'black', fontSize: 20}}>
-        Ajouter une nouvelle carte
+        Ajouter une nouvelle carte 22
       </Text>
     </TouchableOpacity>
   );
