@@ -19,6 +19,7 @@ import axios from 'axios';
 import {baseURL} from './baseURL';
 import LinearGradient from 'react-native-linear-gradient';
 import MyCardComponent from './MyCardComponent';
+import MyCustomCardThatDoesNotFlip from './MyCustomCardThatDoesNotFlip';
 
 axios.defaults.baseURL = baseURL;
 
@@ -41,6 +42,17 @@ const UniqueCardSettings = ({route, navigation}) => {
         console.log('singleCardError', error);
       });
   }, []);
+  let imagedata;
+  switch (card.type) {
+    case 'visa':
+      imagedata = require('./images/12356.jpg');
+      break;
+    case 'master-card':
+      imagedata = require('./images/card-front.png');
+      break;
+    default:
+      break;
+  }
   if (deleteLoading) {
     return (
       <View
@@ -112,11 +124,20 @@ const UniqueCardSettings = ({route, navigation}) => {
       <Body>
         <ScrollView style={{padding: 10}}>
           {/* <CreditCard navigation={navigation} /> */}
-          <MyCardComponent
+          {/* <MyCardComponent
             name={card.name}
             number={card.card_number.match(/.{4}/g).join(' ')}
             expiry={card.exp}
             type={card.type}
+          /> */}
+          <MyCustomCardThatDoesNotFlip
+            imageFront={imagedata}
+            imageBack={imagedata}
+            bar={true}
+            number={card.card_number}
+            name={card.name.toUpperCase()}
+            expiry={card.exp}
+            focused={'number'}
           />
           <View
             style={{

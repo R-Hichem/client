@@ -108,7 +108,6 @@ const TestComponent = ({navigation}) => {
             fontSize: 20,
             color: '#F5F1ED',
             fontWeight: 'bold',
-            fontFamily: 'Kredit',
           }}>
           Mes cartes
         </Text>
@@ -134,7 +133,7 @@ const TestComponent = ({navigation}) => {
             let imagedata;
             switch (card.type) {
               case 'visa':
-                imagedata = require('./images/background.png');
+                imagedata = require('./images/12356.jpg');
                 break;
               case 'master-card':
                 imagedata = require('./images/card-front.png');
@@ -182,7 +181,6 @@ const TestComponent = ({navigation}) => {
                 <MyCustomCardThatDoesNotFlip
                   imageFront={imagedata}
                   imageBack={imagedata}
-                  shiny={true}
                   bar={true}
                   number={card.card_number}
                   name={card.name.toUpperCase()}
@@ -248,7 +246,7 @@ const AddCreditCard = ({navigation}) => {
       onPress={() => navigation.navigate('AddCard')}>
       <Icon type="Feather" name="plus" style={{color: 'black', fontSize: 50}} />
       <Text style={{color: 'black', fontSize: 20}}>
-        Ajouter une nouvelle carte 22
+        Ajouter une nouvelle carte
       </Text>
     </TouchableOpacity>
   );

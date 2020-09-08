@@ -96,7 +96,7 @@ const AddCard = ({navigation}) => {
         }}>
         <Icon
           type="FontAwesome"
-          name="user"
+          name="plus"
           style={{margin: 10, color: 'white', fontSize: 20}}
         />
         <Text
@@ -105,7 +105,7 @@ const AddCard = ({navigation}) => {
             color: '#F5F1ED',
             fontWeight: 'bold',
           }}>
-          Mes cartes
+          Ajouter une carte
         </Text>
         <Text
           style={{
@@ -144,6 +144,8 @@ const AddCard = ({navigation}) => {
           </Item>
         </Form>
         <CreditCardInput
+          allowScroll
+          cardFontFamily="kredit.regular"
           cardScale={0.9}
           onChange={__onChange}
           labels={{
