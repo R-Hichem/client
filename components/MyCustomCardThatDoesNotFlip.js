@@ -190,9 +190,7 @@ class CreditCard extends Component {
               ) : null}
               <View style={styles.info}>
                 <View style={styles.number}>
-                  <Text style={styles.textNumber}>
-                    {this.getValue('number')}
-                  </Text>
+                  <Text style={styles.textNumber}>{this.props.number}</Text>
                 </View>
                 <View style={styles.rowWrap}>
                   <View style={styles.name}>
@@ -246,9 +244,7 @@ class CreditCard extends Component {
               ) : null}
               <View style={styles.info}>
                 <View style={styles.number}>
-                  <Text style={styles.textNumber}>
-                    {this.getValue('number')}
-                  </Text>
+                  <Text style={styles.textNumber}>{this.props.number}</Text>
                 </View>
                 <View style={styles.rowWrap}>
                   <View style={styles.name}>

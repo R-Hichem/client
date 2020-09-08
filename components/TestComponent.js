@@ -10,7 +10,7 @@ import {
   Spinner,
   View,
 } from 'native-base';
-import {StyleSheet, Image, Modal, Alert} from 'react-native';
+import {StyleSheet, Image, Modal, Alert, ActivityIndicator} from 'react-native';
 import {
   TouchableOpacity,
   ScrollView,
@@ -26,7 +26,7 @@ import MyCustomCardThatDoesNotFlip from './MyCustomCardThatDoesNotFlip';
 axios.defaults.baseURL = baseURL;
 
 const TestComponent = ({navigation}) => {
-  const {user} = useContext(AuthContext);
+  const {user, logout} = useContext(AuthContext);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -74,8 +74,9 @@ const TestComponent = ({navigation}) => {
           justifyContent: 'space-around',
           padding: 30,
         }}>
-        <Text style={{fontSize: 20}}>Mise à jour des informations ...</Text>
-        <Spinner color="blue" size={100} />
+        {/* <Text style={{fontSize: 20}}>Mise à jour des informations ...</Text>
+        <Spinner color="blue" size={100} /> */}
+        <ActivityIndicator />
       </View>
     );
   }
@@ -87,45 +88,58 @@ const TestComponent = ({navigation}) => {
         angleCenter={{x: 0.5, y: 0}}
         colors={['#1399cd', '#0f509e']}
         start={{x: 0.0, y: 0.25}}
-        end={{x: 0.5, y: 1.0}}
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          backgroundColor: '#5DA271',
-          padding: 10,
-          borderBottomLeftRadius: 15,
-          borderBottomRightRadius: 15,
-        }}>
-        <Icon
-          type="FontAwesome"
-          name="user"
-          style={{margin: 10, color: 'white', fontSize: 20}}
-        />
-        <Text
+        end={{x: 0.5, y: 1.0}}>
+        <View
           style={{
-            fontSize: 20,
-            color: '#F5F1ED',
-            fontWeight: 'bold',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 10,
+            borderBottomLeftRadius: 15,
+            borderBottomRightRadius: 15,
           }}>
-          Mes cartes
-        </Text>
-        <Text
-          style={{
-            fontSize: 20,
-            color: '#F5F1ED',
-            fontWeight: 'bold',
-            textAlign: 'right',
-            justifyContent: 'flex-end',
-            flexGrow: 1,
-          }}>
-          <Icon
-            type="FontAwesome"
-            name="bell"
-            style={{margin: 10, color: 'white', fontSize: 20}}
-          />
-        </Text>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Icon
+              type="FontAwesome"
+              name="user"
+              style={{margin: 10, color: 'white', fontSize: 20}}
+            />
+            <Text
+              style={{
+                fontSize: 20,
+                color: '#F5F1ED',
+                fontWeight: 'bold',
+              }}>
+              Mes cartes
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              setLoading(true);
+              logout();
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: '#F5F1ED',
+                fontWeight: 'bold',
+                textAlign: 'right',
+              }}>
+              <Icon
+                type="FontAwesome5"
+                name="power-off"
+                style={{margin: 10, color: 'white', fontSize: 20}}
+              />
+            </Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
       <Body>
         <ScrollView>
@@ -185,7 +199,6 @@ const TestComponent = ({navigation}) => {
                   number={card.card_number}
                   name={card.name.toUpperCase()}
                   expiry={card.exp}
-                  focused={'number'}
                 />
               </TouchableOpacity>
             );

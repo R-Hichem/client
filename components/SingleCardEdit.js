@@ -30,24 +30,47 @@ axios.defaults.baseURL = baseURL;
 
 const SingleCardEdit = ({route, navigation}) => {
   const [newCardObject, setNewCardObject] = useState(null);
+  const [validation, setValidation] = useState({});
   const [loading, setLoading] = useState(false);
   const {addCard, user} = useContext(AuthContext);
   const {card} = route.params;
-  const [cardHolderName, setCardHolderName] = useState(card.name);
+  const [cardImages, setCardImages] = useState({
+    front: require('./images/vector.png'),
+    back: require('./images/vector.png'),
+  });
   const __onChange = form => {
-    console.log(form);
+    console.log(form.status);
+    setValidation(form.status);
     setNewCardObject(form);
-    setCardHolderName(form.values.name);
+    if (
+      form.values.type &&
+      (form.values.type === 'visa' || form.values.type === 'master-card')
+    ) {
+      form.values.type === 'visa'
+        ? setCardImages({
+            front: require('./images/12356.jpg'),
+            back: require('./images/12356.jpg'),
+          })
+        : setCardImages({
+            front: require('./images/card-front.png'),
+            back: require('./images/card-back.png'),
+          });
+    } else {
+      setCardImages({
+        front: require('./images/background.png'),
+        back: require('./images/background.png'),
+      });
+    }
   };
   const cardInfo = {
     type: 'visa',
   };
-  const editCardinfo = (cardName, cardDetails, user, setLoading) => {
+  const editCardinfo = (cardDetails, user, setLoading) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
     axios
       .post('/api/editcard/' + card.id, {
         id: card.id,
-        name: cardName,
+        name: cardDetails.name,
         card_number: cardDetails.number,
         type: cardDetails.type ? cardDetails.type : 'other',
         ccv: cardDetails.cvc,
@@ -98,8 +121,8 @@ const SingleCardEdit = ({route, navigation}) => {
           borderBottomRightRadius: 15,
         }}>
         <Icon
-          type="FontAwesome"
-          name="user"
+          type="FontAwesome5"
+          name="edit"
           style={{margin: 10, color: 'white', fontSize: 20}}
         />
         <Text
@@ -108,7 +131,7 @@ const SingleCardEdit = ({route, navigation}) => {
             color: '#F5F1ED',
             fontWeight: 'bold',
           }}>
-          Mes cartes
+          Modifier
         </Text>
         <Text
           style={{
@@ -118,13 +141,8 @@ const SingleCardEdit = ({route, navigation}) => {
             textAlign: 'right',
             justifyContent: 'flex-end',
             flexGrow: 1,
-          }}>
-          <Icon
-            type="FontAwesome"
-            name="bell"
-            style={{margin: 10, color: 'white', fontSize: 20}}
-          />
-        </Text>
+          }}
+        />
       </LinearGradient>
       <ScrollView
         style={{
@@ -147,6 +165,7 @@ const SingleCardEdit = ({route, navigation}) => {
           </Item>
         </Form> */}
         <CreditCardInput
+          cardFontFamily="kredit.regular"
           allowScroll
           requiresName
           cardScale={0.9}
@@ -163,22 +182,19 @@ const SingleCardEdit = ({route, navigation}) => {
             cvc: card.ccv,
             name: card.name,
           }}
+          cardImageFront={cardImages.front}
+          cardImageBack={cardImages.back}
         />
 
         {newCardObject ? (
           newCardObject.status.number !== 'incomplete' &&
           newCardObject.status.expiry === 'valid' &&
           newCardObject.status.cvc === 'valid' ? (
-            cardHolderName ? (
+            newCardObject.status.name === 'valid' ? (
               <TouchableOpacity
                 onPress={() => {
                   setLoading(true);
-                  editCardinfo(
-                    cardHolderName,
-                    newCardObject.values,
-                    user,
-                    setLoading,
-                  );
+                  editCardinfo(newCardObject.values, user, setLoading);
                 }}
                 style={{
                   marginTop: 30,
@@ -187,28 +203,67 @@ const SingleCardEdit = ({route, navigation}) => {
               </TouchableOpacity>
             ) : null
           ) : (
-            <Text
+            <View
               style={{
-                textAlign: 'center',
-                fontSize: 25,
-                fontWeight: 'bold',
-                padding: 15,
-                color: 'red',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 30,
               }}>
-              incomplet
-            </Text>
+              {Object.keys(validation).map(key =>
+                validation[key] === 'valid' ? null : validation[key] ===
+                  'invalid' ? (
+                  <View
+                    style={{display: 'flex', flexDirection: 'row'}}
+                    key={key}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                      }}>
+                      {' '}
+                      {key} :{' '}
+                    </Text>
+                    <Text style={{color: 'red'}}> non valide ! </Text>
+                  </View>
+                ) : (
+                  <View
+                    style={{display: 'flex', flexDirection: 'row'}}
+                    key={key}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                      }}>
+                      {' '}
+                      {key} :{' '}
+                    </Text>
+                    <Text style={{color: 'orange'}}> : incomplet ! </Text>
+                  </View>
+                ),
+              )}
+            </View>
+            // <Text
+            //   style={{
+            //     textAlign: 'center',
+            //     fontSize: 25,
+            //     fontWeight: 'bold',
+            //     padding: 15,
+            //     color: 'red',
+            //   }}>
+            //   incomplet
+            // </Text>
           )
-        ) : (
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 25,
-              fontWeight: 'bold',
-              padding: 15,
-            }}>
-            hello not def ?
-          </Text>
-        )}
+        ) : // <Text
+        //   style={{
+        //     textAlign: 'center',
+        //     fontSize: 25,
+        //     fontWeight: 'bold',
+        //     padding: 15,
+        //   }}>
+        //   hello not def ?
+        // </Text>
+        null}
       </ScrollView>
     </Container>
   );

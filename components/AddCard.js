@@ -32,19 +32,44 @@ const AddCard = ({navigation}) => {
   const [newCardObject, setNewCardObject] = useState(null);
   const [cardHolderName, setCardHolderName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validation, setValidation] = useState({});
+  const [cardImages, setCardImages] = useState({
+    front: require('./images/vector.png'),
+    back: require('./images/vector.png'),
+  });
   const {addCard, user} = useContext(AuthContext);
   const __onChange = form => {
     console.log(form.status);
+    setValidation(form.status);
     setNewCardObject(form);
+    if (
+      form.values.type &&
+      (form.values.type === 'visa' || form.values.type === 'master-card')
+    ) {
+      form.values.type === 'visa'
+        ? setCardImages({
+            front: require('./images/12356.jpg'),
+            back: require('./images/12356.jpg'),
+          })
+        : setCardImages({
+            front: require('./images/card-front.png'),
+            back: require('./images/card-back.png'),
+          });
+    } else {
+      setCardImages({
+        front: require('./images/background.png'),
+        back: require('./images/background.png'),
+      });
+    }
   };
   const cardInfo = {
     type: 'visa',
   };
-  const addCardInfo = (cardName, cardDetails, user, setLoading) => {
+  const addCardInfo = (cardDetails, user, setLoading) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
     axios
       .post('/api/addCard', {
-        name: cardName,
+        name: cardDetails.name,
         card_number: cardDetails.number,
         type: cardDetails.type ? cardDetails.type : 'other',
         ccv: cardDetails.cvc,
@@ -115,19 +140,15 @@ const AddCard = ({navigation}) => {
             textAlign: 'right',
             justifyContent: 'flex-end',
             flexGrow: 1,
-          }}>
-          <Icon
-            type="FontAwesome"
-            name="bell"
-            style={{margin: 10, color: 'white', fontSize: 20}}
-          />
-        </Text>
+          }}
+        />
       </LinearGradient>
       <ScrollView
         style={{
           padding: 10,
+          marginTop: 50,
         }}>
-        <Form style={{paddingHorizontal: 25}}>
+        {/* <Form style={{paddingHorizontal: 25}}>
           <Item
             style={{
               borderBottomWidth: 2,
@@ -142,41 +163,43 @@ const AddCard = ({navigation}) => {
               value={cardHolderName}
             />
           </Item>
-        </Form>
+        </Form> */}
         <CreditCardInput
+          // inputStyle={{fontFamily: 'kredit.regular'}}
+          requiresName
           allowScroll
           cardFontFamily="kredit.regular"
           cardScale={0.9}
           onChange={__onChange}
           labels={{
             number: 'Numero de la carte',
-            expiry: "Date d'expiration",
+            expiry: 'exp',
+            cvc: 'cvc',
+            name: 'Nom Sur la carte',
           }}
-          addtionalInputsProps={{
-            name: {
-              defaultValue: 'my name',
-              maxLength: 40,
-            },
-            postalCode: {
-              returnKeyType: 'go',
-            },
-          }}
+          // additionalInputsProps={{
+          //   name: {
+          //     defaultValue: 'my name',
+          //     maxLength: 40,
+          //     fontStyle: 'normal',
+          //   },
+          //   postalCode: {
+          //     returnKeyType: 'go',
+          //   },
+          // }}
+          cardImageFront={cardImages.front}
+          cardImageBack={cardImages.back}
         />
 
         {newCardObject ? (
           newCardObject.status.number !== 'incomplete' &&
           newCardObject.status.expiry === 'valid' &&
           newCardObject.status.cvc === 'valid' ? (
-            cardHolderName ? (
+            newCardObject.status.name === 'valid' ? (
               <TouchableOpacity
                 onPress={() => {
                   setLoading(true);
-                  addCardInfo(
-                    cardHolderName,
-                    newCardObject.values,
-                    user,
-                    setLoading,
-                  );
+                  addCardInfo(newCardObject.values, user, setLoading);
                 }}
                 style={{
                   marginTop: 30,
@@ -185,28 +208,67 @@ const AddCard = ({navigation}) => {
               </TouchableOpacity>
             ) : null
           ) : (
-            <Text
+            <View
               style={{
-                textAlign: 'center',
-                fontSize: 25,
-                fontWeight: 'bold',
-                padding: 15,
-                color: 'red',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 30,
               }}>
-              incomplet
-            </Text>
+              {Object.keys(validation).map(key =>
+                validation[key] === 'valid' ? null : validation[key] ===
+                  'invalid' ? (
+                  <View
+                    style={{display: 'flex', flexDirection: 'row'}}
+                    key={key}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                      }}>
+                      {' '}
+                      {key} :{' '}
+                    </Text>
+                    <Text style={{color: 'red'}}> non valide ! </Text>
+                  </View>
+                ) : (
+                  <View
+                    style={{display: 'flex', flexDirection: 'row'}}
+                    key={key}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textTransform: 'uppercase',
+                      }}>
+                      {' '}
+                      {key} :{' '}
+                    </Text>
+                    <Text style={{color: 'orange'}}> : incomplet ! </Text>
+                  </View>
+                ),
+              )}
+            </View>
+            // <Text
+            //   style={{
+            //     textAlign: 'center',
+            //     fontSize: 25,
+            //     fontWeight: 'bold',
+            //     padding: 15,
+            //     color: 'red',
+            //   }}>
+            //   incomplet
+            // </Text>
           )
-        ) : (
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 25,
-              fontWeight: 'bold',
-              padding: 15,
-            }}>
-            hello not def ?
-          </Text>
-        )}
+        ) : // <Text
+        //   style={{
+        //     textAlign: 'center',
+        //     fontSize: 25,
+        //     fontWeight: 'bold',
+        //     padding: 15,
+        //   }}>
+        //   hello not def ?
+        // </Text>
+        null}
       </ScrollView>
     </Container>
   );

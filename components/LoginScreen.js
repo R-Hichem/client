@@ -15,6 +15,7 @@ import {
   Input,
 } from 'native-base';
 import {AuthContext} from './AuthProvider';
+import LinearGradient from 'react-native-linear-gradient';
 
 const LoginScreen = ({navigation}) => {
   const {login, error} = useContext(AuthContext);
@@ -22,12 +23,47 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   return (
     <Container>
-      <Header>
-        <Body style={styles.horizentalCenter}>
-          <Text style={styles.titre}>Connexion</Text>
-          <Icon name="user" type="Feather" style={{color: 'white'}} />
-        </Body>
-      </Header>
+      <LinearGradient
+        useAngle={true}
+        angle={180}
+        angleCenter={{x: 0.5, y: 0}}
+        colors={['#1399cd', '#0f509e']}
+        start={{x: 0.0, y: 0.25}}
+        end={{x: 0.5, y: 1.0}}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          backgroundColor: '#5DA271',
+          padding: 10,
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
+        }}>
+        <Icon
+          type="FontAwesome"
+          name="user"
+          style={{margin: 10, color: 'white', fontSize: 20}}
+        />
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
+          }}>
+          Connexion
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#F5F1ED',
+            fontWeight: 'bold',
+            textAlign: 'right',
+            justifyContent: 'flex-end',
+            flexGrow: 1,
+          }}
+        />
+      </LinearGradient>
       <Content>
         {error ? (
           <Text
@@ -64,11 +100,10 @@ const LoginScreen = ({navigation}) => {
         </Form>
 
         <Button
-          block
-          Primary
+          transparent
           style={{margin: 30}}
           onPress={() => login(email, password)}>
-          <Text>Se Connecter ? </Text>
+          <MyButton text="Seconnecter" iconName="credit-card" />
         </Button>
       </Content>
     </Container>
@@ -76,6 +111,46 @@ const LoginScreen = ({navigation}) => {
 };
 
 export default LoginScreen;
+
+const MyButton = ({text, iconName, iconFamily}) => {
+  return (
+    <LinearGradient
+      useAngle={true}
+      angle={180}
+      angleCenter={{x: 0.5, y: 0}}
+      colors={['#1399cd', '#0f509e']}
+      start={{x: 0.0, y: 0.25}}
+      end={{x: 0.5, y: 1.0}}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#5DA271',
+        padding: 10,
+        borderRadius: 15,
+        marginVertical: 8,
+      }}>
+      <Text
+        style={{
+          fontSize: 20,
+          color: '#F5F1ED',
+          flexDirection: 'row',
+          fontWeight: 'bold',
+          justifyContent: 'center',
+          flexGrow: 1,
+          textAlign: 'center',
+        }}>
+        {text}
+      </Text>
+      {/* <Icon
+          type={iconFamily ? iconFamily : 'FontAwesome'}
+          name={iconName}
+          style={{margin: 10, color: 'white', fontSize: 20}}
+        /> */}
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
   testHighlight: {

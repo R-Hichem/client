@@ -118,13 +118,8 @@ const Home = ({navigation}) => {
             textAlign: 'right',
             justifyContent: 'flex-end',
             flexGrow: 1,
-          }}>
-          <Icon
-            type="FontAwesome"
-            name="bell"
-            style={{margin: 10, color: 'white', fontSize: 20}}
-          />
-        </Text>
+          }}
+        />
       </LinearGradient>
       <Body>
         <ScrollView>
